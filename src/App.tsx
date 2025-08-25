@@ -1,10 +1,10 @@
 import "./App.css";
-import { Form } from "./components/Form/Form";
+import { CreateUser } from "./components/CreateUserForm/CreateUser";
 
 function App() {
   return (
     <>
-      <Form />
+      <CreateUser />
     </>
   );
 }
