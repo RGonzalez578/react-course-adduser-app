@@ -26,9 +26,10 @@ export const ListUsers = () => {
   };
 
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col gap-4 w-full">
       <h1>List of Users</h1>
       <button
+        className="w-50"
         onClick={() => {
           navigate("/users/create");
         }}
@@ -42,12 +43,13 @@ export const ListUsers = () => {
       )}
       {users.length > 0 && (
         <div>
-          <table>
+          <table className="w-full table-auto">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Birth Date</th>
+                <th className="p-3">Name</th>
+                <th className="p-3">Email</th>
+                <th className="p-3">Birth Date</th>
+                <th className="p-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -63,10 +65,10 @@ export const ListUsers = () => {
                       navigate(`/users/${user._id}`);
                     }}
                   >
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{formattedDate}</td>
-                    <td>
+                    <td className="p-3">{user.name}</td>
+                    <td className="p-3">{user.email}</td>
+                    <td className="p-3">{formattedDate}</td>
+                    <td className="p-3">
                       <button
                         onClick={() => {
                           deleteUser(user._id);
