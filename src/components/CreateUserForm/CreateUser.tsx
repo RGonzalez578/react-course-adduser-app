@@ -1,5 +1,6 @@
-import { useState } from "react";
 import "./CreateUser.css";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export const CreateUser = () => {
   const [name, setName] = useState("");
@@ -7,6 +8,8 @@ export const CreateUser = () => {
   const [birthDate, setBirthDate] = useState("");
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const clearState = () => {
     setName("");
@@ -18,24 +21,29 @@ export const CreateUser = () => {
 
   const addUser = async () => {
     const endpoint = "http://localhost:3000/api/users";
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        dob: birthDate,
-        username,
-        password: pass,
-      }),
-    });
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          dob: birthDate,
+          username,
+          password: pass,
+        }),
+      });
 
-    if (!response.ok) throw new Error("Create user action went wrong: ");
-
-    console.log("User Created: ", response.body);
-    clearState();
+      if (!response.ok) throw new Error("Create user action went wrong: ");
+      console.log("User Created: ", response.body);
+      clearState();
+      navigate("/users");
+    } catch (error: any) {
+      console.log("Error creating user: ", error);
+      setError(error);
+    }
   };
 
   return (
@@ -84,6 +92,7 @@ export const CreateUser = () => {
             }}
           />
           <button onClick={addUser}>Add User</button>
+          {error && <span>Error creating user, try again</span>}
         </div>
       </section>
     </>

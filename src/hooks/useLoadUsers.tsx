@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 
-export const useLoadUsers = () => {
-  const [users, setUsers] = useState([]);
+export const useLoadUsers = (userId?: string) => {
+  const [users, setUsers] = useState<any>([]);
   const [error, setError] = useState("");
 
   async function loadUsers() {
-    const endpoint = "http://localhost:3000/api/users";
+    const base = "http://localhost:3000/api/users";
+    const endpoint = `${userId ? base + "/" + userId : base}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
