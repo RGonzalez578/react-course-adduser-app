@@ -1,6 +1,7 @@
 import "./UpdateUser.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useGetUser } from "../../hooks/useGetUser";
 
 export const UpdateUser = () => {
   const [name, setName] = useState("");
@@ -9,6 +10,7 @@ export const UpdateUser = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user, error: errorGetUser } = useGetUser(id ?? "");
 
   const clearState = () => {
     setName("");
@@ -16,31 +18,18 @@ export const UpdateUser = () => {
     setBirthDate("");
   };
 
-  const getUser = async (id: string) => {
-    const endpoint = `http://localhost:3000/api/users/${id}`;
-    try {
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const _data = await response.json();
-      console.log(_data);
-      setName(_data.name);
-      setEmail(_data.email);
-      setBirthDate(_data.dob.split("T")[0]);
-    } catch (error: any) {
-      setError(error);
-    }
-  };
-
   useEffect(() => {
-    if (id) getUser(id);
-  }, []);
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+      if (user.dob) {
+        setBirthDate(user.dob.split("T")[0]);
+      }
+    }
+  }, [user]);
 
   const updateUser = async () => {
-    const endpoint = "http://localhost:3000/api/users";
+    const endpoint = `http://localhost:3000/api/users/${id}`;
     try {
       const response = await fetch(endpoint, {
         method: "PUT",
@@ -93,8 +82,9 @@ export const UpdateUser = () => {
               setBirthDate(e.target.value);
             }}
           />
-          <button onClick={updateUser}>Add User</button>
-          {error && <span>Error loading user, try again</span>}
+          <button onClick={updateUser}>Update User</button>
+          {error && <span>Error Updating user, try again</span>}
+          {errorGetUser && <span>Error loading user, Reload</span>}
         </div>
       </section>
     </>
