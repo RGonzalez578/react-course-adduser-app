@@ -1,10 +1,17 @@
 import "./App.css";
-import { CreateUser } from "./components/CreateUserForm/CreateUser";
+import { Outlet, NavLink } from "react-router";
 
 function App() {
   return (
     <>
-      <CreateUser />
+      <main>
+        <nav>
+          <NavLink to={"/users"}>List Users</NavLink>
+          <NavLink to={"/users/create"}>Create User</NavLink>
+          <NavLink to={"/users/:id"}>Update User</NavLink>
+        </nav>
+        <Outlet />
+      </main>
     </>
   );
 }
